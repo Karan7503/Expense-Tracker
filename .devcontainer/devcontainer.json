@@ -1,0 +1,26 @@
+{
+  "name": "Full Stack Expense Tracker",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17"
+    },
+    "ghcr.io/devcontainers/features/android-sdk:1": {},
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.10"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  },
+  "postCreateCommand": "wget -qO flutter_sdk.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.22.0-stable.tar.xz && tar -xvf flutter_sdk.tar.xz && rm flutter_sdk.tar.xz && echo 'export PATH=$HOME/flutter/bin:$PATH' >> ~/.bashrc",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Dart-Code.flutter",
+        "Dart-Code.dart-code",
+        "ms-python.python"
+      ]
+    }
+  }
+}
