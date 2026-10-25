@@ -1,0 +1,26 @@
+from fastapi import APIRouter, HTTPException
+from ..database import client
+from ..models import Salary
+
+router = APIRouter(prefix="/salary", tags=["salary"])
+
+@router.get("/")
+def get_salary():
+    result = client.execute("SELECT * FROM salary WHERE id = 1")
+    row = result.rows[0] if result.rows else None
+    if not row:
+        return None
+    return {
+        "source": row[1],
+        "amount": row[2],
+        "description": row[3],
+        "updatedAt": row[4]
+    }
+
+@router.post("/")
+def save_salary(salary: Salary):
+    client.execute("""
+        INSERT OR REPLACE INTO salary (id, source, amount, description, updatedAt)
+        VALUES (1, ?, ?, ?, ?)
+    """, (salary.source, salary.amount, salary.description, salary.updatedAt))
+    return {"status": "saved"}

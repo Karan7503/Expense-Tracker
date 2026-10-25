@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+python-dotenv
+libsql-client  # Turso client (or use httpx if you prefer REST)
+pydantic

@@ -1,0 +1,31 @@
+from fastapi import APIRouter
+from ..database import client
+from ..models import Transaction
+
+router = APIRouter(prefix="/transactions", tags=["transactions"])
+
+@router.get("/")
+def get_transactions():
+    result = client.execute("SELECT * FROM transactions ORDER BY createdAt DESC")
+    rows = result.rows
+    return [
+        {
+            "id": r[0],
+            "type": r[1],
+            "title": r[2],
+            "category": r[3],
+            "amount": r[4],
+            "date": r[5],
+            "time": r[6],
+            "createdAt": r[7]
+        }
+        for r in rows
+    ]
+
+@router.post("/")
+def add_transaction(tx: Transaction):
+    client.execute("""
+        INSERT INTO transactions (id, type, title, category, amount, date, time, createdAt)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """, (tx.id, tx.type, tx.title, tx.category, tx.amount, tx.date, tx.time, tx.createdAt))
+    return {"status": "added"}
