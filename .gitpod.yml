@@ -1,0 +1,23 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - name: "Setup Flutter & Android"
+    init: |
+      # Flutter SDK ko PATH mein add karo
+      echo 'export PATH=$FLUTTER_HOME/bin:$PATH' >> ~/.bashrc
+      echo 'export ANDROID_HOME=$HOME/android-sdk' >> ~/.bashrc
+      echo 'export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH' >> ~/.bashrc
+      source ~/.bashrc
+      flutter doctor --android-licenses || true
+
+  - name: "Start Emulator"
+    command: |
+      # Emulator ko headless mode mein start karo
+      echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd --force --name test --package "system-images;android-33;google_apis;x86_64" || true
+      $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-window -gpu swiftshader_indirect &
+      echo "Emulator starting in background..."
+
+ports:
+  - port: 8000
+    onOpen: open-preview
